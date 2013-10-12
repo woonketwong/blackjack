@@ -10,6 +10,10 @@ class window.CardView extends Backbone.View
 
   render: ->
     @$el.children().detach().end().html
-    @$el.html @template @model.attributes
-    @$el.addClass 'covered' unless @model.get 'revealed'
+    if @model.get 'revealed'
+      @$el.css
+        'background': 'url("lib/img/cards/'+@model.get('backgroundImg')+'.png")'
+        'background-size': '100px 140px'
+    else
+      @$el.addClass 'covered'
 
