@@ -14,8 +14,4 @@ class window.HandView extends Backbone.View
     @$el.html @template @collection
     @$el.append @collection.map (card) ->
       new CardView(model: card).$el
-    # call bust()
-      # render alert()!
-    # check the score
     @$('.score').text @collection.displayScore()
-     # render "this.el "

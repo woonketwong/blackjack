@@ -11,16 +11,20 @@ class window.AppView extends Backbone.View
     "click .stand-button": -> @model.get('playerHand').stand()
 
 
+
+
   initialize: ->
     @model.on 'bust', => @endGame()
+    @model.on 'endResult', => @endGame()
     @render()
 
   endGame: ->
-    #figure out winner -
-    #alert winner
-    #prompt for new game? (extra)
     @render()
-    alert(@model.get('winner')+' Wins!')
+    winner = @model.get('winner')
+    if winner is 'Push'
+      alert("Dealer Push!")
+    else
+      alert(winner+' Wins!')
 
   render: ->
     @$el.children().detach()

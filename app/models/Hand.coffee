@@ -6,10 +6,29 @@ class window.Hand extends Backbone.Collection
 
   hit: -> @add(@deck.pop()).last()
 
+  stand: ->
+    @trigger('stand', @)
+
+  finalScore: ->
+    currentScores = @scores()
+    if currentScores.length is 2
+      if currentScores[1] <= 21
+        return currentScores[1]
+    currentScores[0]
+
+  autoPlay: ->
+    currentScores = @scores()
+
+    if currentScores.length is 2 and
+      currentScores[1] <= 21
+        index = 1
+    else index = 0
+    if currentScores[index] >= 17 and
+      currentScores[index] <= 21
+        @stand()
+    else if currentScores[index] < 17 then @hit()
+
   scores: ->
-    # The scores are an array of potential scores.
-    # Usually, that array contains one element. That is the only score.
-    # when there is an ace, it offers you two scores - the original score, and score + 10.
     hasAce = @reduce (memo, card) ->
       memo or card.get('value') is 1
     , false
