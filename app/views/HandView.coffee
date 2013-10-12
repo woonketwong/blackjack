@@ -9,9 +9,15 @@ class window.HandView extends Backbone.View
     @collection.on 'add remove change', => @render()
     @render()
 
-  render: ->
+  render: (e)->
     @$el.children().detach()
     @$el.html @template @collection
-    @$el.append @collection.map (card) ->
-      new CardView(model: card).$el
+    that = @$el
+    @collection.map (card) ->
+      if !card.get('rendered')
+        card.set({'rendered': true},{silent:true})
+        that.append new CardView(model: card).$el.fadeIn(1000)
+      else
+        that.append new CardView(model: card).$el
+
     @$('.score').text @collection.displayScore()

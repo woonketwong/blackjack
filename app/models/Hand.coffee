@@ -18,7 +18,6 @@ class window.Hand extends Backbone.Collection
 
   autoPlay: ->
     currentScores = @scores()
-
     if currentScores.length is 2 and
       currentScores[1] <= 21
         index = 1
@@ -26,7 +25,11 @@ class window.Hand extends Backbone.Collection
     if currentScores[index] >= 17 and
       currentScores[index] <= 21
         @stand()
-    else if currentScores[index] < 17 then @hit()
+
+    else if currentScores[index] < 17
+      setTimeout( =>
+        @hit()
+      , 1000)
 
   scores: ->
     hasAce = @reduce (memo, card) ->

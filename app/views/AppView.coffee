@@ -21,10 +21,10 @@ class window.AppView extends Backbone.View
   endGame: ->
     @render()
     winner = @model.get('winner')
-    if winner is 'Push'
-      alert("Dealer Push!")
+    if winner is 'Player'
+      console.log('Player Wins!')
     else
-      alert(winner+' Wins!')
+      console.log('Dealer Wins!')
 
   render: ->
     @$el.children().detach()
