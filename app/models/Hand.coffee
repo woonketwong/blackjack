@@ -17,3 +17,10 @@ class window.Hand extends Backbone.Collection
       score + if card.get 'revealed' then card.get 'value' else 0
     , 0
     if hasAce then [score, score + 10] else [score]
+
+  displayScore: ->
+    currentScores = @scores()
+    if currentScores.length is 2 and currentScores[1] <= 21
+      currentScores[0]+ ' or ' +currentScores[1]
+    else
+      currentScores[0]
