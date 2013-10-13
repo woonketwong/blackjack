@@ -10,33 +10,53 @@ class window.App extends Backbone.Model
     @set 'dealerScore', 0
     @set 'winner', null
 
-    @get('playerHand').on 'add', =>
-      @set 'playerScore', @get('playerHand').scores()[0]
-      if @isBust(@get('playerScore'))
-        @set 'winner', 'Dealer'
-        @get('dealerHand').first().flip()
-        @trigger('bust', @)
+    @get('playerHand').on 'all', (e) => @playerEvents(e)
+    @get('dealerHand').on 'all', (e) => @dealerEvents(e)
 
-    @get('dealerHand').on 'add', =>
-      @set 'dealerScore', @get('dealerHand').scores()[0]
-      if @isBust(@get('dealerScore'))
-        @set 'winner', 'Player'
-        @trigger('bust', @)
-      else @get('dealerHand').autoPlay()
-
-    @get('playerHand').on 'stand', =>
+  playerEvents: (event) ->
+    if event is 'hit'
       @set 'playerScore', @get('playerHand').finalScore()
+    else if event is 'stand'
+      @set 'currentPlayer', 'Dealer'
+      @get('dealerHand').autoPlay()
+    else if event is 'bust'
       @set 'currentPlayer', 'Dealer'
       @get('dealerHand').first().flip()
-      @get('dealerHand').autoPlay()
+      @set 'winner', 'Dealer'
 
-    @get('dealerHand').on 'stand', =>
+
+  dealerEvents: (event) ->
+    if event is 'hit'
       @set 'dealerScore', @get('dealerHand').finalScore()
+      @get('dealerHand').autoPlay()
+    else if event is 'stand'
       @pickWinner()
-      @trigger('endResult', @)
+    else if event is 'bust'
+      @set 'winner', 'Player'
 
-  isBust: (score) ->
-    score > 21
+    # @get('playerHand').on 'hit', =>
+    #   @set 'playerScore', @get('playerHand').scores()[0]
+    #   if @isBust(@get('playerScore'))
+    #     @set 'winner', 'Dealer'
+    #     @get('dealerHand').first().flip()
+    #     @trigger('bust', @)
+
+    # @get('dealerHand').on 'hit', =>
+    #   @set 'dealerScore', @get('dealerHand').scores()[0]
+    #   if @isBust(@get('dealerScore'))
+    #     @set 'winner', 'Player'
+    #     @trigger('bust', @)
+    #   else @get('dealerHand').autoPlay()
+
+    # @get('playerHand').on 'stand', =>
+    #   @set 'playerScore', @get('playerHand').finalScore()
+    #   @set 'currentPlayer', 'Dealer'
+    #   @get('dealerHand').autoPlay()
+
+    # @get('dealerHand').on 'stand', =>
+    #   @set 'dealerScore', @get('dealerHand').finalScore()
+    #   @pickWinner()
+    #   @trigger('endResult', @)
 
   pickWinner: ->
 

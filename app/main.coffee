@@ -1,1 +1,3 @@
-new AppView(model: new App()).$el.appendTo 'body'
+appViewEl = new AppView(model: new App())
+appViewEl.$el.addClass 'blackjackTable'
+appViewEl.$el.appendTo 'body'

@@ -1,3 +1,17 @@
+.blackjackTable {
+  width: 100%;
+}
+
+.player-hand-container {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.dealer-hand-container {
+  width: 50%;
+  margin: 0 auto;
+}
+
 .card {
   float: left;
   border: solid 1px black;

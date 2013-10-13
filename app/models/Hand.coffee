@@ -4,19 +4,32 @@ class window.Hand extends Backbone.Collection
 
   initialize: (array, @deck, @isDealer) ->
 
-  hit: -> @add(@deck.pop()).last()
+  turnEnded: false
+
+  hit: ->
+    if @turnEnded then return
+    @add(@deck.pop()).last()
+    if @finalScore() <= 21
+      @trigger('hit')
+    else @bust()
 
   stand: ->
-    @trigger('stand', @)
+    if @turnEnded then return
+    turnEnded = true
+    @trigger('stand')
+
+  bust: ->
+    @turnEnded = true
+    @trigger('bust')
 
   finalScore: ->
     currentScores = @scores()
-    if currentScores.length is 2
-      if currentScores[1] <= 21
-        return currentScores[1]
+    if currentScores.length is 2 and currentScores[1] <= 21
+        currentScores[1]
     currentScores[0]
 
   autoPlay: ->
+    if !@first().get('revealed') then @first().flip()
     currentScores = @scores()
     if currentScores.length is 2 and
       currentScores[1] <= 21
@@ -30,6 +43,7 @@ class window.Hand extends Backbone.Collection
       setTimeout( =>
         @hit()
       , 1000)
+    else @bust()
 
   scores: ->
     hasAce = @reduce (memo, card) ->
